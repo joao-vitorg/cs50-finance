@@ -1,6 +1,6 @@
-package com.example.backend.repository;
+package com.example.backend.repositories;
 
-import com.example.backend.model.Stock;
+import com.example.backend.models.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StockRepository extends JpaRepository<Stock, Integer> {
