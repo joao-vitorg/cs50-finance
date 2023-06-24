@@ -29,5 +29,5 @@ public class Client {
     private BigDecimal VirtualBalance = BigDecimal.valueOf(0);
 
     @OneToMany(mappedBy = "client", orphanRemoval = true)
-    private Set<UserStock> userStocks = new LinkedHashSet<>();
+    private Set<ClientStock> clientStocks = new LinkedHashSet<>();
 }

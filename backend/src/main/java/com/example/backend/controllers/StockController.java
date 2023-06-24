@@ -1,6 +1,6 @@
 package com.example.backend.controllers;
 
-import com.example.backend.models.Stock;
+import com.example.backend.models.dto.StockDTO;
 import com.example.backend.services.StockService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +19,12 @@ public class StockController {
     }
 
     @GetMapping
-    public List<Stock> findAll() {
+    public List<StockDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Stock findById(@PathVariable Integer id) {
+    public StockDTO findById(@PathVariable Integer id) {
         return service.findByID(id);
     }
 }

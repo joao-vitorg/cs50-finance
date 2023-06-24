@@ -32,7 +32,7 @@ public class Stock {
     private Instant modifiedAt;
 
     @OneToMany(mappedBy = "stock", orphanRemoval = true)
-    private Set<UserStock> userStocks = new LinkedHashSet<>();
+    private Set<ClientStock> clientStocks = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "stock", orphanRemoval = true)
     private Set<StockHistory> stockHistories = new LinkedHashSet<>();

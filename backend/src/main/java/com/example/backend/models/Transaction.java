@@ -27,9 +27,6 @@ public class Transaction {
     @Column(nullable = false)
     private Integer shares;
 
-    @Column(nullable = false)
-    private boolean type;
-
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal price;
 
