@@ -23,10 +23,10 @@ public class Client {
     private String password;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal balance = BigDecimal.valueOf(1000);
+    private BigDecimal balance;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal VirtualBalance = BigDecimal.valueOf(0);
+    private BigDecimal virtualBalance;
 
     @OneToMany(mappedBy = "client", orphanRemoval = true)
     private Set<ClientStock> clientStocks = new LinkedHashSet<>();

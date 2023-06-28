@@ -1,6 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.models.Client;
+import com.example.backend.models.ClientStock;
 import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.dto.ClientVo;
 import com.example.backend.models.mapper.ClientMapper;
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 @Service
 public class ClientService {
     private final ClientRepository repository;
+    private final StockService stockService;
     private final ClientMapper clientMapper;
 
     public ClientService(ClientRepository repository,
-                         ClientMapper clientMapper) {
+                         StockService stockService, ClientMapper clientMapper) {
         this.repository = repository;
+        this.stockService = stockService;
         this.clientMapper = clientMapper;
     }
 
@@ -29,8 +32,22 @@ public class ClientService {
     }
 
     public void withdraw(Client client, BigDecimal amount) {
-        if (client.getBalance().compareTo(amount) < 0) throw new Error();
+        if (client.getBalance().compareTo(amount) < 0) throw new Error("Insufficient funds.");
         client.setBalance(client.getBalance().subtract(amount));
+    }
+
+    public void updateVirtualBalance(Client client) {
+        BigDecimal virtualBalance = BigDecimal.ZERO;
+        for (ClientStock transaction : client.getClientStocks()) {
+            BigDecimal stockPrice = transaction.getStock().getPrice();
+            BigDecimal amount = BigDecimal.valueOf(transaction.getShares());
+            virtualBalance = virtualBalance.add(stockPrice.multiply(amount));
+        }
+        client.setVirtualBalance(virtualBalance);
+    }
+
+    public Client getReference(Integer id) {
+        return repository.getReferenceById(id);
     }
 
     public ClientVo findByID(Integer id) {

@@ -3,12 +3,14 @@ package com.example.backend.controllers;
 import com.example.backend.models.dto.TransactionDTO;
 import com.example.backend.models.dto.TransactionVo;
 import com.example.backend.services.TransactionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/transaction")
+@Tag(name = "Transaction", description = "Transaction API")
 public class TransactionController {
     private final TransactionService service;
 

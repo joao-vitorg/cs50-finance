@@ -3,12 +3,14 @@ package com.example.backend.controllers;
 import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.dto.ClientVo;
 import com.example.backend.services.ClientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")
+@Tag(name = "User", description = "User API")
 public class UserController {
     private final ClientService service;
 

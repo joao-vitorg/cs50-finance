@@ -31,6 +31,7 @@ public class TransactionService {
 
     public void buy(Transaction transaction) {
         clientService.withdraw(transaction.getClient(), transaction.getPrice());
+        clientService.updateVirtualBalance(transaction.getClient());
     }
 
     public void sell(Transaction transaction) {
@@ -38,11 +39,11 @@ public class TransactionService {
     }
 
     public TransactionVo findByID(Integer id) {
-        return transactionMapper.toDto1(repository.findById(id).orElseThrow());
+        return transactionMapper.toDto(repository.findById(id).orElseThrow());
     }
 
     public List<TransactionVo> findAll() {
-        return repository.findAll().stream().map(transactionMapper::toDto1).collect(Collectors.toList());
+        return repository.findAll().stream().map(transactionMapper::toDto).collect(Collectors.toList());
     }
 
     public TransactionVo save(TransactionDTO entityDTO) {
@@ -54,12 +55,8 @@ public class TransactionService {
 
         if (transaction.getShares() > 0) buy(transaction);
         else if (transaction.getShares() < 0) sell(transaction);
-        else throw new Error();
+        else throw new Error("Shares cannot be 0.");
 
-        return transactionMapper.toDto1(repository.save(transaction));
-    }
-
-    public void deleteByID(Integer id) {
-        repository.deleteById(id);
+        return transactionMapper.toDto(repository.save(transaction));
     }
 }

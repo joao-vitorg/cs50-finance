@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.models.Stock;
 import com.example.backend.models.dto.StockVo;
 import com.example.backend.models.mapper.StockMapper;
 import com.example.backend.repositories.StockRepository;
@@ -17,6 +18,10 @@ public class StockService {
                         StockMapper stockMapper) {
         this.repository = repository;
         this.stockMapper = stockMapper;
+    }
+
+    public Stock getReference(Integer id) {
+        return repository.getReferenceById(id);
     }
 
     public StockVo findByID(Integer id) {
