@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.models.dto.TransactionDTO;
+import com.example.backend.models.dto.TransactionVo;
 import com.example.backend.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +17,17 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<TransactionDTO> findAll() {
+    public List<TransactionVo> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public TransactionDTO findById(@PathVariable Integer id) {
+    public TransactionVo findById(@PathVariable Integer id) {
         return service.findByID(id);
     }
 
     @PostMapping
-    public void insert(@RequestBody TransactionDTO transaction) {
-        service.save(transaction);
-    }
-
-    @PutMapping
-    public void update(@RequestBody TransactionDTO transaction) {
-        service.save(transaction);
+    public TransactionVo insert(@RequestBody TransactionDTO transaction) {
+        return service.save(transaction);
     }
 }

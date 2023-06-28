@@ -1,34 +1,32 @@
 package com.example.backend.services;
 
-import com.example.backend.models.ClientStock;
-import com.example.backend.models.dto.ClientStockDTO;
+import com.example.backend.models.dto.ClientStockVo;
+import com.example.backend.models.mapper.ClientStockMapper;
 import com.example.backend.repositories.ClientStockRepository;
-import com.example.backend.services.mapper.DozerMapper;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
 public class ClientStockService {
     private final ClientStockRepository repository;
+    private final ClientStockMapper clientStockMapper;
 
-    public ClientStockService(ClientStockRepository repository) {
+    public ClientStockService(ClientStockRepository repository,
+                              ClientStockMapper clientStockMapper) {
         this.repository = repository;
+        this.clientStockMapper = clientStockMapper;
     }
 
-    public ClientStockDTO findByID(Integer id) {
-        return DozerMapper.parseObject(repository.findById(id).orElseThrow(), ClientStockDTO.class);
+    public ClientStockVo findByID(Integer id) {
+        return clientStockMapper.toDto(repository.findById(id).orElseThrow());
     }
 
-    public List<ClientStockDTO> findAll() {
-        return DozerMapper.parseListObject(repository.findAll(), ClientStockDTO.class);
-    }
-
-    public ClientStockDTO save(ClientStockDTO entityDTO) {
-        ClientStock entity = DozerMapper.parseObject(entityDTO, ClientStock.class);
-        return DozerMapper.parseObject(repository.save(entity), ClientStockDTO.class);
+    public List<ClientStockVo> findAll() {
+        return repository.findAll().stream().map(clientStockMapper::toDto).collect(Collectors.toList());
     }
 
     public void deleteByID(Integer id) {

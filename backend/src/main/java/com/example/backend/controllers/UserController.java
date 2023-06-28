@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
-import com.example.backend.models.dto.ClientDTO;
+import com.example.backend.models.dto.ClientDto;
+import com.example.backend.models.dto.ClientVo;
 import com.example.backend.services.ClientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +17,22 @@ public class UserController {
     }
 
     @GetMapping
-    public List<ClientDTO> findAll() {
+    public List<ClientVo> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ClientDTO findById(@PathVariable Integer id) {
+    public ClientVo findById(@PathVariable Integer id) {
         return service.findByID(id);
     }
 
     @PostMapping
-    public void insert(@RequestBody ClientDTO user) {
+    public void insert(@RequestBody ClientDto user) {
         service.save(user);
     }
 
     @PutMapping
-    public void update(@RequestBody ClientDTO user) {
+    public void update(@RequestBody ClientDto user) {
         service.save(user);
     }
 }

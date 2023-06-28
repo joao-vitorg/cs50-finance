@@ -1,35 +1,29 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Stock;
-import com.example.backend.models.dto.StockDTO;
+import com.example.backend.models.dto.StockVo;
+import com.example.backend.models.mapper.StockMapper;
 import com.example.backend.repositories.StockRepository;
-import com.example.backend.services.mapper.DozerMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StockService {
     private final StockRepository repository;
+    private final StockMapper stockMapper;
 
-    public StockService(StockRepository repository) {
+    public StockService(StockRepository repository,
+                        StockMapper stockMapper) {
         this.repository = repository;
+        this.stockMapper = stockMapper;
     }
 
-    public StockDTO findByID(Integer id) {
-        return DozerMapper.parseObject(repository.findById(id).orElseThrow(), StockDTO.class);
+    public StockVo findByID(Integer id) {
+        return stockMapper.toDto(repository.findById(id).orElseThrow());
     }
 
-    public List<StockDTO> findAll() {
-        return DozerMapper.parseListObject(repository.findAll(), StockDTO.class);
-    }
-
-    public StockDTO save(StockDTO entityDTO) {
-        Stock entity = DozerMapper.parseObject(entityDTO, Stock.class);
-        return DozerMapper.parseObject(repository.save(entity), StockDTO.class);
-    }
-
-    public void deleteByID(Integer id) {
-        repository.deleteById(id);
+    public List<StockVo> findAll() {
+        return repository.findAll().stream().map(stockMapper::toDto).collect(Collectors.toList());
     }
 }

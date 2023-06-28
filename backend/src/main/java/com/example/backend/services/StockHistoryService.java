@@ -1,32 +1,30 @@
 package com.example.backend.services;
 
-import com.example.backend.models.StockHistory;
-import com.example.backend.models.dto.StockHistoryDTO;
+import com.example.backend.models.dto.StockHistoryVo;
+import com.example.backend.models.mapper.StockHistoryMapper;
 import com.example.backend.repositories.StockHistoryRepository;
-import com.example.backend.services.mapper.DozerMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StockHistoryService {
     private final StockHistoryRepository repository;
+    private final StockHistoryMapper stockHistoryMapper;
 
-    public StockHistoryService(StockHistoryRepository repository) {
+    public StockHistoryService(StockHistoryRepository repository,
+                               StockHistoryMapper stockHistoryMapper) {
         this.repository = repository;
+        this.stockHistoryMapper = stockHistoryMapper;
     }
 
-    public StockHistoryDTO findByID(Integer id) {
-        return DozerMapper.parseObject(repository.findById(id).orElseThrow(), StockHistoryDTO.class);
+    public StockHistoryVo findByID(Integer id) {
+        return stockHistoryMapper.toDto(repository.findById(id).orElseThrow());
     }
 
-    public List<StockHistoryDTO> findAll() {
-        return DozerMapper.parseListObject(repository.findAll(), StockHistoryDTO.class);
-    }
-
-    public StockHistoryDTO save(StockHistoryDTO entityDTO) {
-        StockHistory entity = DozerMapper.parseObject(entityDTO, StockHistory.class);
-        return DozerMapper.parseObject(repository.save(entity), StockHistoryDTO.class);
+    public List<StockHistoryVo> findAll() {
+        return repository.findAll().stream().map(stockHistoryMapper::toDto).collect(Collectors.toList());
     }
 
     public void deleteByID(Integer id) {
