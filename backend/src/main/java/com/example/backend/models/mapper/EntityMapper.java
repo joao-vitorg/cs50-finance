@@ -25,6 +25,10 @@ public interface EntityMapper {
     @Mapping(source = "clientId", target = "client")
     ClientStock map(ClientStockDto clientStockDto);
 
+    @Mapping(source = "stockId", target = "stock")
+    @Mapping(source = "clientId", target = "client")
+    ClientStock toClientStock(Integer clientId, Integer stockId);
+
     @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
     ClientStockDto map(ClientStock clientStock);

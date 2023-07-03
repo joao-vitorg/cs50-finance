@@ -30,4 +30,17 @@ public class Client {
 
     @OneToMany(mappedBy = "client", orphanRemoval = true)
     private Set<ClientStock> clientStocks = new LinkedHashSet<>();
+
+    public void transactVirtualBalance(BigDecimal amount) {
+        BigDecimal newVirtualBalance = getVirtualBalance().add(amount);
+        if (newVirtualBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new Error("Insufficient funds.");
+        setVirtualBalance(newVirtualBalance);
+    }
+
+    public void transactBalance(BigDecimal amount) {
+        BigDecimal newBalance = getBalance().add(amount);
+        if (newBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new Error("Insufficient funds.");
+        transactVirtualBalance(amount.negate());
+        setBalance(newBalance);
+    }
 }

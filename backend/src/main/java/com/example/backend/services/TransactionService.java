@@ -15,22 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
     private final TransactionRepository repository;
-    private final ClientService clientService;
+    private final ClientStockService clientStockService;
     private final EntityMapper mapper;
 
-    public TransactionService(TransactionRepository repository, ClientService clientService, EntityMapper mapper) {
+    public TransactionService(TransactionRepository repository, ClientStockService clientStockService, EntityMapper mapper) {
         this.repository = repository;
-        this.clientService = clientService;
+        this.clientStockService = clientStockService;
         this.mapper = mapper;
-    }
-
-    public void buy(Transaction transaction) {
-        clientService.withdraw(transaction.getClient(), transaction.getTotal());
-        clientService.updateVirtualBalance(transaction.getClient());
-    }
-
-    public void sell(Transaction transaction) {
-        clientService.deposit(transaction.getClient(), transaction.getTotal());
     }
 
     public TransactionDto findByID(Integer id) {
@@ -46,11 +37,9 @@ public class TransactionService {
 
         BigDecimal stockPrice = transaction.getStock().getPrice();
         BigDecimal amount = BigDecimal.valueOf(transaction.getShares());
-        transaction.setTotal(stockPrice.multiply(amount));
+        transaction.setTotal(stockPrice.multiply(amount).negate());
 
-        if (transaction.getShares() > 0) buy(transaction);
-        else if (transaction.getShares() < 0) sell(transaction);
-        else throw new Error("Shares cannot be 0.");
+        clientStockService.transact(transaction);
 
         return mapper.map(repository.save(transaction));
     }

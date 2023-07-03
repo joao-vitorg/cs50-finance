@@ -3,6 +3,7 @@ package com.example.backend.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import java.math.BigDecimal;
 
@@ -14,17 +15,32 @@ public class ClientStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(nullable = false)
+    @NaturalId
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Client client;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(nullable = false)
+    @NaturalId
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 
     @Column(nullable = false)
-    private Integer shares;
+    private Integer shares = 0;
 
     @Column(nullable = false, precision = 6, scale = 2)
-    private BigDecimal total;
+    private BigDecimal total = BigDecimal.valueOf(0);
+
+    public void transactShares(Integer shares) {
+        int newShares = this.shares + shares;
+        if (newShares < 0) throw new Error("Cliente não possui a quantidade necessária de Stocks");
+        setShares(newShares);
+    }
+
+    @PostPersist
+    @PostUpdate
+    public void trigger() {
+        BigDecimal price = getStock().getPrice();
+        setTotal(price.multiply(BigDecimal.valueOf(getShares())));
+    }
 }
