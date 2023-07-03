@@ -1,9 +1,7 @@
 package com.example.backend.services;
 
-import com.example.backend.models.ClientStock;
 import com.example.backend.models.dto.ClientStockDto;
-import com.example.backend.models.dto.ClientStockVo;
-import com.example.backend.models.mapper.ClientStockMapper;
+import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.ClientStockRepository;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -16,27 +14,27 @@ import java.util.stream.Collectors;
 public class ClientStockService {
     private final ClientStockRepository repository;
     private final ClientService clientService;
-    private final ClientStockMapper clientStockMapper;
+    private final EntityMapper mapper;
 
     public ClientStockService(ClientStockRepository repository,
-                              ClientService clientService, ClientStockMapper clientStockMapper) {
+                              ClientService clientService, EntityMapper mapper) {
         this.repository = repository;
         this.clientService = clientService;
-        this.clientStockMapper = clientStockMapper;
+        this.mapper = mapper;
     }
 
-    public void buy(ClientStockDto clientStockDto) {
-        ClientStock entity = clientStockMapper.toEntity(clientStockDto);
-        entity.setShares(entity.getShares() + clientStock.getShares());
-        entity.setTotal(entity.getTotal().add(clientStock.getTotal()));
-        repository.save(entity);
+//    public void buy(ClientStockDto clientStockDto) {
+//        ClientStock entity = mapper.map(clientStockDto);
+//        entity.setShares(entity.getShares() + clientStock.getShares());
+//        entity.setTotal(entity.getTotal().add(clientStock.getTotal()));
+//        repository.save(entity);
+//    }
+
+    public ClientStockDto findByID(Integer id) {
+        return mapper.map(repository.findById(id).orElseThrow());
     }
 
-    public ClientStockVo findByID(Integer id) {
-        return clientStockMapper.toDto(repository.findById(id).orElseThrow());
-    }
-
-    public List<ClientStockVo> findAll() {
-        return repository.findAll().stream().map(clientStockMapper::toDto).collect(Collectors.toList());
+    public List<ClientStockDto> findAll() {
+        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
     }
 }

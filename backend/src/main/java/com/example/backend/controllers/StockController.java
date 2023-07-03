@@ -1,6 +1,6 @@
 package com.example.backend.controllers;
 
-import com.example.backend.models.dto.StockVo;
+import com.example.backend.models.dto.StockDto;
 import com.example.backend.services.StockService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +21,12 @@ public class StockController {
     }
 
     @GetMapping
-    public List<StockVo> findAll() {
+    public List<StockDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public StockVo findById(@PathVariable Integer id) {
+    public StockDto findById(@PathVariable Integer id) {
         return service.findByID(id);
     }
 }

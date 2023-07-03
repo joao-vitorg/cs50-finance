@@ -1,9 +1,8 @@
 package com.example.backend.models.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-/**
- * DTO for {@link com.example.backend.models.ClientStock}
- */
-public record ClientStockDto(Integer clientId, Integer stockId, Integer shares) implements Serializable {
+public record ClientStockDto(Integer id, Integer clientId, Integer stockId, Integer shares,
+                             BigDecimal total) implements Serializable {
 }

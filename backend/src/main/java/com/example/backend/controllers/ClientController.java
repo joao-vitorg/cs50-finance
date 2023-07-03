@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/user")
-@Tag(name = "User", description = "User API")
-public class UserController {
+@RequestMapping("api/v1/client")
+@Tag(name = "Client", description = "Client API")
+public class ClientController {
     private final ClientService service;
 
-    public UserController(ClientService service) {
+    public ClientController(ClientService service) {
         this.service = service;
     }
 

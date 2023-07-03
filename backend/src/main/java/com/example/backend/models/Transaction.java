@@ -28,7 +28,7 @@ public class Transaction {
     private Integer shares;
 
     @Column(nullable = false, precision = 6, scale = 2)
-    private BigDecimal price;
+    private BigDecimal total;
 
     @CreationTimestamp
     @Column(nullable = false)

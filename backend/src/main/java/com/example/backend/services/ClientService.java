@@ -4,7 +4,7 @@ import com.example.backend.models.Client;
 import com.example.backend.models.ClientStock;
 import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.dto.ClientVo;
-import com.example.backend.models.mapper.ClientMapper;
+import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.ClientRepository;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 public class ClientService {
     private final ClientRepository repository;
     private final StockService stockService;
-    private final ClientMapper clientMapper;
+    private final EntityMapper mapper;
 
     public ClientService(ClientRepository repository,
-                         StockService stockService, ClientMapper clientMapper) {
+                         StockService stockService, EntityMapper mapper) {
         this.repository = repository;
         this.stockService = stockService;
-        this.clientMapper = clientMapper;
+        this.mapper = mapper;
     }
 
     public void deposit(Client client, BigDecimal amount) {
@@ -46,21 +46,17 @@ public class ClientService {
         client.setVirtualBalance(virtualBalance);
     }
 
-    public Client getReference(Integer id) {
-        return repository.getReferenceById(id);
-    }
-
     public ClientVo findByID(Integer id) {
-        return clientMapper.toDto(repository.findById(id).orElseThrow());
+        return mapper.map(repository.findById(id).orElseThrow());
     }
 
     public List<ClientVo> findAll() {
-        return repository.findAll().stream().map(clientMapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
     }
 
     public ClientVo save(ClientDto entityDTO) {
-        Client entity = clientMapper.toEntity(entityDTO);
-        return clientMapper.toDto(repository.save(entity));
+        Client entity = mapper.map(entityDTO);
+        return mapper.map(repository.save(entity));
     }
 
     public void deleteByID(Integer id) {

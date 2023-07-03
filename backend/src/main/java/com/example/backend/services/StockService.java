@@ -1,8 +1,7 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Stock;
-import com.example.backend.models.dto.StockVo;
-import com.example.backend.models.mapper.StockMapper;
+import com.example.backend.models.dto.StockDto;
+import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.StockRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +11,19 @@ import java.util.stream.Collectors;
 @Service
 public class StockService {
     private final StockRepository repository;
-    private final StockMapper stockMapper;
+    private final EntityMapper mapper;
 
     public StockService(StockRepository repository,
-                        StockMapper stockMapper) {
+                        EntityMapper mapper) {
         this.repository = repository;
-        this.stockMapper = stockMapper;
+        this.mapper = mapper;
     }
 
-    public Stock getReference(Integer id) {
-        return repository.getReferenceById(id);
+    public StockDto findByID(Integer id) {
+        return mapper.map(repository.findById(id).orElseThrow());
     }
 
-    public StockVo findByID(Integer id) {
-        return stockMapper.toDto(repository.findById(id).orElseThrow());
-    }
-
-    public List<StockVo> findAll() {
-        return repository.findAll().stream().map(stockMapper::toDto).collect(Collectors.toList());
+    public List<StockDto> findAll() {
+        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
     }
 }
