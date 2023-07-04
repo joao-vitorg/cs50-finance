@@ -40,4 +40,6 @@ public interface EntityMapper {
     @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
     TransactionDto map(Transaction transaction);
+
+    Stock map(StockDto stockDto);
 }

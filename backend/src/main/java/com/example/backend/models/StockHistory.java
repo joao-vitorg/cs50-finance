@@ -2,6 +2,7 @@ package com.example.backend.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,6 +12,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class StockHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +28,9 @@ public class StockHistory {
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;
+
+    public StockHistory(Stock stock, BigDecimal price) {
+        this.stock = stock;
+        this.price = price;
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.backend.controllers;
 
 import com.example.backend.models.dto.StockDto;
+import com.example.backend.models.dto.StockHistoryDto;
+import com.example.backend.services.StockHistoryService;
 import com.example.backend.services.StockService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,11 @@ import java.util.List;
 @Tag(name = "Stock", description = "Stock API")
 public class StockController {
     private final StockService service;
+    private final StockHistoryService stockHistoryService;
 
-    public StockController(StockService service) {
+    public StockController(StockService service, StockHistoryService stockHistoryService) {
         this.service = service;
+        this.stockHistoryService = stockHistoryService;
     }
 
     @GetMapping
@@ -28,5 +32,10 @@ public class StockController {
     @GetMapping("/{id}")
     public StockDto findById(@PathVariable Integer id) {
         return service.findByID(id);
+    }
+
+    @GetMapping("/history")
+    public List<StockHistoryDto> findAllStockHistory() {
+        return stockHistoryService.findAll();
     }
 }

@@ -13,8 +13,7 @@ public class StockService {
     private final StockRepository repository;
     private final EntityMapper mapper;
 
-    public StockService(StockRepository repository,
-                        EntityMapper mapper) {
+    public StockService(StockRepository repository, EntityMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
