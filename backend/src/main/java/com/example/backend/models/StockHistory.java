@@ -18,15 +18,15 @@ public class StockHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 
-    @Column(nullable = false, precision = 6, scale = 2)
+    @Column(nullable = false, updatable = false, precision = 6, scale = 2)
     private BigDecimal price;
 
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     public StockHistory(Stock stock, BigDecimal price) {

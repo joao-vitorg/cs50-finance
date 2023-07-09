@@ -2,6 +2,7 @@ package com.example.backend.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
@@ -10,37 +11,37 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class ClientStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NaturalId
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Client client;
 
     @NaturalId
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 
     @Column(nullable = false)
     private Integer shares = 0;
 
-    @Column(nullable = false, precision = 6, scale = 2)
-    private BigDecimal total = BigDecimal.valueOf(0);
+    public ClientStock(Client client, Stock stock) {
+        this.client = client;
+        this.stock = stock;
+    }
+
+    public BigDecimal getTotal() {
+        return getStock().getPrice().multiply(BigDecimal.valueOf(getShares()));
+    }
 
     public void transactShares(Integer shares) {
         int newShares = this.shares + shares;
-        if (newShares < 0) throw new Error("Cliente não possui a quantidade necessária de Stocks");
+        if (newShares < 0) throw new Error("Cliente don't have Stock.");
         setShares(newShares);
-    }
-
-    @PostPersist
-    @PostUpdate
-    public void trigger() {
-        BigDecimal price = getStock().getPrice();
-        setTotal(price.multiply(BigDecimal.valueOf(getShares())));
     }
 }

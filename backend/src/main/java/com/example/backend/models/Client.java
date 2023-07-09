@@ -23,24 +23,21 @@ public class Client {
     private String password;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.valueOf(10000);
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal virtualBalance;
-
-    @OneToMany(mappedBy = "client", orphanRemoval = true)
+    @OneToMany(mappedBy = "client")
     private Set<ClientStock> clientStocks = new LinkedHashSet<>();
 
-    public void transactVirtualBalance(BigDecimal amount) {
-        BigDecimal newVirtualBalance = getVirtualBalance().add(amount);
-        if (newVirtualBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new Error("Insufficient funds.");
-        setVirtualBalance(newVirtualBalance);
+    @OneToMany(mappedBy = "client")
+    private Set<Transaction> transactions = new LinkedHashSet<>();
+
+    public BigDecimal getVirtualBalance() {
+        return getClientStocks().stream().map(ClientStock::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void transactBalance(BigDecimal amount) {
         BigDecimal newBalance = getBalance().add(amount);
         if (newBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new Error("Insufficient funds.");
-        transactVirtualBalance(amount.negate());
         setBalance(newBalance);
     }
 }

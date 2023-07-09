@@ -4,14 +4,14 @@ import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.TransactionDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.TransactionRepository;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
 @Service
 public class TransactionService {
     private final TransactionRepository repository;
@@ -24,14 +24,22 @@ public class TransactionService {
         this.mapper = mapper;
     }
 
+    @Transactional(readOnly = true)
     public TransactionDto findByID(Integer id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
+    @Transactional(readOnly = true)
     public List<TransactionDto> findAll() {
         return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<TransactionDto> findByClientId(Integer id) {
+        return repository.findByClientId(id).stream().map(mapper::map).collect(Collectors.toList());
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public TransactionDto save(TransactionDto entityDTO) {
         Transaction transaction = mapper.map(entityDTO);
 

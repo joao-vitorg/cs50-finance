@@ -16,21 +16,21 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Client client;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Integer shares;
 
-    @Column(nullable = false, precision = 6, scale = 2)
+    @Column(nullable = false, updatable = false, precision = 6, scale = 2)
     private BigDecimal total;
 
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 }

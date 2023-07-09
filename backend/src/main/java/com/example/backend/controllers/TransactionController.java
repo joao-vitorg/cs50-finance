@@ -27,6 +27,11 @@ public class TransactionController {
         return service.findByID(id);
     }
 
+    @GetMapping("/client/{id}")
+    public List<TransactionDto> findByClientId(@PathVariable Integer id) {
+        return service.findByClientId(id);
+    }
+
     @PostMapping
     public TransactionDto insert(@RequestBody TransactionDto transaction) {
         return service.save(transaction);

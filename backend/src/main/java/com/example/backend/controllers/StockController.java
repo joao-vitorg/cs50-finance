@@ -34,6 +34,11 @@ public class StockController {
         return service.findByID(id);
     }
 
+    @GetMapping("/{id}/history")
+    public List<StockHistoryDto> findByStockId(@PathVariable Integer id) {
+        return stockHistoryService.findByStockId(id);
+    }
+
     @GetMapping("/history")
     public List<StockHistoryDto> findAllStockHistory() {
         return stockHistoryService.findAll();

@@ -18,10 +18,10 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private String symbol;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String name;
 
     @Column(nullable = false, precision = 6, scale = 2)
@@ -35,5 +35,8 @@ public class Stock {
     private Set<ClientStock> clientStocks = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "stock", orphanRemoval = true)
-    private Set<StockHistory> stockHistories = new LinkedHashSet<>();
+    private Set<Transaction> transactions = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "stock", orphanRemoval = true)
+    private Set<StockHistory> histories = new LinkedHashSet<>();
 }
