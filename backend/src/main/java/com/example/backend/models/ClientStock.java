@@ -1,5 +1,6 @@
 package com.example.backend.models;
 
+import com.example.backend.exceptions.ClientDontHaveStockError;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public class ClientStock {
 
     public void transactShares(Integer shares) {
         int newShares = this.shares + shares;
-        if (newShares < 0) throw new Error("Cliente don't have Stock.");
+        if (newShares < 0) throw new ClientDontHaveStockError();
         setShares(newShares);
     }
 }

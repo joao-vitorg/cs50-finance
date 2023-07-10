@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.exceptions.ClientDontHaveStockError;
 import com.example.backend.models.Client;
 import com.example.backend.models.ClientStock;
 import com.example.backend.models.Stock;
@@ -41,7 +42,7 @@ public class ClientStockService {
     protected void transact(Transaction transaction) {
         if (transaction.getShares() > 0) buy(transaction);
         else if (transaction.getShares() < 0) sell(transaction);
-        else throw new Error("Shares cannot be 0.");
+        else throw new RuntimeException("Shares cannot be 0.");
     }
 
     private void buy(Transaction transaction) {
@@ -56,7 +57,7 @@ public class ClientStockService {
 
     private void sell(Transaction transaction) {
         ClientStock clientStock = findByClientAndStock(transaction.getClient(), transaction.getStock())
-                .orElseThrow(() -> new Error("Cliente don't have Stock."));
+                .orElseThrow(ClientDontHaveStockError::new);
 
         clientStock.transactShares(transaction.getShares());
         clientStock.getClient().transactBalance(transaction.getTotal());
