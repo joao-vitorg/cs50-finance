@@ -8,12 +8,12 @@ import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.ClientStockDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.ClientStockRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ClientStockService {
@@ -26,13 +26,13 @@ public class ClientStockService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClientStockDto> findByClientID(Integer id) {
-        return repository.findByClientId(id).stream().map(mapper::map).collect(Collectors.toList());
+    public Page<ClientStockDto> findByClientID(Long id, Pageable pageable) {
+        return repository.findByClientId(id, pageable).map(mapper::map);
     }
 
     @Transactional(readOnly = true)
-    public List<ClientStockDto> findAll() {
-        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
+    public Page<ClientStockDto> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::map);
     }
 
     private Optional<ClientStock> findByClientAndStock(Client client, Stock stock) {

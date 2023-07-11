@@ -16,7 +16,7 @@ import java.time.Instant;
 public class StockHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)

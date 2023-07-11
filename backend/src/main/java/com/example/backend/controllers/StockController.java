@@ -11,12 +11,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/v1/stock", produces = {"application/json", "application/xml", "application/x-yml"})
@@ -36,8 +34,12 @@ public class StockController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public List<StockDto> findAll() {
-        return service.findAll();
+    public Page<StockDto> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+                                  @RequestParam(value = "limit", defaultValue = "12") int limit,
+                                  @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                  @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.Direction.valueOf(direction), orderBy);
+        return service.findAll(pageRequest);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +48,7 @@ public class StockController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public StockDto findById(@PathVariable Integer id) {
+    public StockDto findById(@PathVariable Long id) {
         return service.findByID(id);
     }
 
@@ -56,8 +58,13 @@ public class StockController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public List<StockHistoryDto> findByStockId(@PathVariable Integer id) {
-        return stockHistoryService.findByStockId(id);
+    public Page<StockHistoryDto> findByStockId(@PathVariable Long id,
+                                               @RequestParam(value = "page", defaultValue = "0") int page,
+                                               @RequestParam(value = "limit", defaultValue = "12") int limit,
+                                               @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                               @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.Direction.valueOf(direction), orderBy);
+        return stockHistoryService.findByStockId(id, pageRequest);
     }
 
     @GetMapping("/history")
@@ -66,7 +73,11 @@ public class StockController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public List<StockHistoryDto> findAllStockHistory() {
-        return stockHistoryService.findAll();
+    public Page<StockHistoryDto> findAllStockHistory(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                     @RequestParam(value = "limit", defaultValue = "12") int limit,
+                                                     @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                                     @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.Direction.valueOf(direction), orderBy);
+        return stockHistoryService.findAll(pageRequest);
     }
 }

@@ -4,13 +4,13 @@ import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.TransactionDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -25,18 +25,18 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public TransactionDto findByID(Integer id) {
+    public TransactionDto findByID(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
     @Transactional(readOnly = true)
-    public List<TransactionDto> findAll() {
-        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
+    public Page<TransactionDto> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::map);
     }
 
     @Transactional(readOnly = true)
-    public List<TransactionDto> findByClientId(Integer id) {
-        return repository.findByClientId(id).stream().map(mapper::map).collect(Collectors.toList());
+    public Page<TransactionDto> findByClientId(Long id, Pageable pageable) {
+        return repository.findByClientId(id, pageable).map(mapper::map);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

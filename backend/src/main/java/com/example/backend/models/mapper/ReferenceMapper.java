@@ -12,7 +12,7 @@ public class ReferenceMapper {
     private EntityManager entityManager;
 
     @ObjectFactory
-    public <T> T map(final Integer id, @TargetType Class<T> type) {
+    public <T> T map(final Long id, @TargetType Class<T> type) {
         return entityManager.getReference(type, id);
     }
 }

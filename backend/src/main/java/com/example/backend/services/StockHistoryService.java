@@ -5,12 +5,12 @@ import com.example.backend.models.StockHistory;
 import com.example.backend.models.dto.StockHistoryDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.StockHistoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class StockHistoryService {
@@ -23,13 +23,13 @@ public class StockHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<StockHistoryDto> findAll() {
-        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
+    public Page<StockHistoryDto> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::map);
     }
 
     @Transactional(readOnly = true)
-    public List<StockHistoryDto> findByStockId(Integer id) {
-        return repository.findByStockId(id).stream().map(mapper::map).collect(Collectors.toList());
+    public Page<StockHistoryDto> findByStockId(Long id, Pageable pageable) {
+        return repository.findByStockId(id, pageable).map(mapper::map);
     }
 
     public void save(Stock stock, BigDecimal price) {

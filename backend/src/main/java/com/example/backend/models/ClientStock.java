@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class ClientStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NaturalId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -8,9 +8,9 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {ReferenceMapper.class})
 public interface EntityMapper {
-    Client toClient(Integer id);
+    Client toClient(Long id);
 
-    Stock toStock(Integer id);
+    Stock toStock(Long id);
 
     Client map(ClientDto clientDto);
 

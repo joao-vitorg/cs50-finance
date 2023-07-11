@@ -5,14 +5,14 @@ import com.example.backend.models.dto.StockDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.StockHistoryRepository;
 import com.example.backend.repositories.StockRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class StockService {
@@ -27,13 +27,18 @@ public class StockService {
     }
 
     @Transactional(readOnly = true)
-    public StockDto findByID(Integer id) {
+    public StockDto findByID(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
     @Transactional(readOnly = true)
-    public List<StockDto> findAll() {
-        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
+    public Page<StockDto> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::map);
+    }
+
+    @Transactional
+    public StockDto save(StockDto stockDto) {
+        return mapper.map(repository.save(mapper.map(stockDto)));
     }
 
     @Transactional()
@@ -44,7 +49,8 @@ public class StockService {
             BigDecimal factor = BigDecimal.valueOf(1 + random.nextDouble(0.06) - 0.03);
             BigDecimal newPrice = stock.getPrice().multiply(factor);
 
-            if (newPrice.compareTo(BigDecimal.ZERO) < 0) newPrice = BigDecimal.ZERO;
+            BigDecimal minimum = BigDecimal.valueOf(0.01);
+            if (newPrice.compareTo(minimum) < 0) newPrice = minimum;
 
             stock.setPrice(newPrice);
             stockHistoryRepository.save(new StockHistory(stock, newPrice));

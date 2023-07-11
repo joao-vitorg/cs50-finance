@@ -5,11 +5,10 @@ import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.dto.ClientVo;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.repositories.ClientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -22,13 +21,13 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public ClientVo findByID(Integer id) {
+    public ClientVo findByID(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
     @Transactional(readOnly = true)
-    public List<ClientVo> findAll() {
-        return repository.findAll().stream().map(mapper::map).collect(Collectors.toList());
+    public Page<ClientVo> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::map);
     }
 
     @Transactional()

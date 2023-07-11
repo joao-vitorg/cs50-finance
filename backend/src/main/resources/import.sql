@@ -1,5 +1,5 @@
 -- @formatter:off
-INSERT INTO client (username, password, balance) VALUES ('joao', '123', 1000);
+INSERT INTO client (username, password, balance) VALUES ('João', '123456', 1000);
 INSERT INTO stock (symbol, name, price, modified_at) VALUES ('AAPL', 'Apple Inc.', 190, NOW());
 INSERT INTO stock (symbol, name, price, modified_at) VALUES ('MSFT', 'Microsoft Corporation', 330, NOW());
 INSERT INTO stock (symbol, name, price, modified_at) VALUES ('2222', 'SAUDI ARABIAN OIL CO.', 30, NOW());

@@ -10,9 +10,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/client", produces = {"application/json", "application/xml", "application/x-yml"})
@@ -30,8 +31,12 @@ public class ClientController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public List<ClientVo> findAll() {
-        return service.findAll();
+    public Page<ClientVo> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+                                  @RequestParam(value = "limit", defaultValue = "12") int limit,
+                                  @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                  @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Direction.valueOf(direction), orderBy);
+        return service.findAll(pageRequest);
     }
 
     @GetMapping("/{id}")
@@ -40,7 +45,7 @@ public class ClientController {
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    public ClientVo findById(@PathVariable Integer id) {
+    public ClientVo findById(@PathVariable Long id) {
         return service.findByID(id);
     }
 
