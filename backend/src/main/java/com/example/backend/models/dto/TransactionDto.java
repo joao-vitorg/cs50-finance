@@ -1,9 +1,10 @@
 package com.example.backend.models.dto;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
-public record TransactionDto(Long id, Long clientId, Long stockId, Integer shares, BigDecimal total,
-                             Instant createdAt) implements Serializable {
+import java.io.Serializable;
+
+public record TransactionDto(@NotNull @Min(1) Long clientId, @NotNull @Min(1) Long stockId,
+                             @NotNull Integer shares) implements Serializable {
 }

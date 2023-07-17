@@ -3,6 +3,7 @@ package com.example.backend.services;
 import com.example.backend.models.StockHistory;
 import com.example.backend.models.dto.StockDto;
 import com.example.backend.models.mapper.EntityMapper;
+import com.example.backend.models.vo.StockVo;
 import com.example.backend.repositories.StockHistoryRepository;
 import com.example.backend.repositories.StockRepository;
 import org.springframework.data.domain.Page;
@@ -27,18 +28,18 @@ public class StockService {
     }
 
     @Transactional(readOnly = true)
-    public StockDto findByID(Long id) {
+    public StockVo findByID(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
     @Transactional(readOnly = true)
-    public Page<StockDto> findAll(Pageable pageable) {
+    public Page<StockVo> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::map);
     }
 
     @Transactional
-    public StockDto save(StockDto stockDto) {
-        return mapper.map(repository.save(mapper.map(stockDto)));
+    public StockVo save(StockDto stock) {
+        return mapper.map(repository.save(mapper.map(stock)));
     }
 
     @Transactional()

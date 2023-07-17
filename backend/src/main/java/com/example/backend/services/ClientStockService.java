@@ -5,8 +5,8 @@ import com.example.backend.models.Client;
 import com.example.backend.models.ClientStock;
 import com.example.backend.models.Stock;
 import com.example.backend.models.Transaction;
-import com.example.backend.models.dto.ClientStockDto;
 import com.example.backend.models.mapper.EntityMapper;
+import com.example.backend.models.vo.ClientStockVo;
 import com.example.backend.repositories.ClientStockRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +26,12 @@ public class ClientStockService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ClientStockDto> findByClientID(Long id, Pageable pageable) {
+    public Page<ClientStockVo> findByClientId(Long id, Pageable pageable) {
         return repository.findByClientId(id, pageable).map(mapper::map);
     }
 
     @Transactional(readOnly = true)
-    public Page<ClientStockDto> findAll(Pageable pageable) {
+    public Page<ClientStockVo> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::map);
     }
 

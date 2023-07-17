@@ -1,22 +1,20 @@
 package com.example.backend.controllers;
 
-import com.example.backend.exceptions.ExceptionResponse;
 import com.example.backend.models.dto.TransactionDto;
+import com.example.backend.models.vo.TransactionVo;
 import com.example.backend.services.TransactionService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "api/v1/transaction", produces = {"application/json", "application/xml", "application/x-yml"})
+@RequestMapping(value = "api/v1/transaction")
 @Tag(name = "Transaction", description = "Transaction API")
+@Validated
 public class TransactionController {
     private final TransactionService service;
 
@@ -25,54 +23,22 @@ public class TransactionController {
     }
 
     @GetMapping
-    @Operation(
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TransactionDto.class)))),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-            })
-    public Page<TransactionDto> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
-                                        @RequestParam(value = "limit", defaultValue = "12") int limit,
-                                        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                                        @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.Direction.valueOf(direction), orderBy);
-        return service.findAll(pageRequest);
+    public Page<TransactionVo> findAllTransactions(@ParameterObject Pageable pageable) {
+        return service.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    @Operation(responses = {
-            @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = TransactionDto.class))),
-            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-    })
-    public TransactionDto findById(@PathVariable Long id) {
+    public TransactionVo findTransactionById(@PathVariable @Min(1) Long id) {
         return service.findByID(id);
     }
 
     @GetMapping("/client/{id}")
-    @Operation(responses = {
-            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TransactionDto.class)))),
-            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-    })
-    public Page<TransactionDto> findByClientId(@PathVariable Long id,
-                                               @RequestParam(value = "page", defaultValue = "0") int page,
-                                               @RequestParam(value = "limit", defaultValue = "12") int limit,
-                                               @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                                               @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.Direction.valueOf(direction), orderBy);
-        return service.findByClientId(id, pageRequest);
+    public Page<TransactionVo> findTransactionByClientId(@PathVariable @Min(1) Long id, @ParameterObject Pageable pageable) {
+        return service.findByClientId(id, pageable);
     }
 
-    @PostMapping(consumes = {"application/json", "application/xml", "application/x-yml"})
-    @Operation(
-            description = "Caso o campo 'shares' seja positivo, a transação será de compra. Caso seja negativo, será de venda.",
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = TransactionDto.class))),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class))),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-            })
-    public TransactionDto insert(@RequestBody TransactionDto transaction) {
+    @PostMapping()
+    public TransactionVo insertTransaction(@RequestBody TransactionDto transaction) {
         return service.save(transaction);
     }
 }

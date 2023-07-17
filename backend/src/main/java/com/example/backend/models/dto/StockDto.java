@@ -1,9 +1,12 @@
 package com.example.backend.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 
-public record StockDto(Long id, String symbol, String name, BigDecimal price,
-                       Instant modifiedAt) implements Serializable {
+public record StockDto(@NotBlank String symbol, @NotBlank String name,
+                       @NotNull @Positive BigDecimal price) implements Serializable {
 }

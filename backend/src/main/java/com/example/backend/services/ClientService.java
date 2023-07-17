@@ -2,8 +2,8 @@ package com.example.backend.services;
 
 import com.example.backend.models.Client;
 import com.example.backend.models.dto.ClientDto;
-import com.example.backend.models.dto.ClientVo;
 import com.example.backend.models.mapper.EntityMapper;
+import com.example.backend.models.vo.ClientVo;
 import com.example.backend.repositories.ClientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +33,13 @@ public class ClientService {
     @Transactional()
     public ClientVo save(ClientDto entityDTO) {
         Client entity = mapper.map(entityDTO);
+        return mapper.map(repository.save(entity));
+    }
+
+    @Transactional()
+    public ClientVo update(Long id, ClientDto entityDTO) {
+        Client entity = mapper.map(entityDTO);
+        entity.setId(id);
         return mapper.map(repository.save(entity));
     }
 }

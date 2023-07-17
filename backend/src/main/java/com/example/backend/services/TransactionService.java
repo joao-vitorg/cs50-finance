@@ -3,6 +3,7 @@ package com.example.backend.services;
 import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.TransactionDto;
 import com.example.backend.models.mapper.EntityMapper;
+import com.example.backend.models.vo.TransactionVo;
 import com.example.backend.repositories.TransactionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,22 +26,22 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public TransactionDto findByID(Long id) {
+    public TransactionVo findByID(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 
     @Transactional(readOnly = true)
-    public Page<TransactionDto> findAll(Pageable pageable) {
+    public Page<TransactionVo> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::map);
     }
 
     @Transactional(readOnly = true)
-    public Page<TransactionDto> findByClientId(Long id, Pageable pageable) {
+    public Page<TransactionVo> findByClientId(Long id, Pageable pageable) {
         return repository.findByClientId(id, pageable).map(mapper::map);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public TransactionDto save(TransactionDto entityDTO) {
+    public TransactionVo save(TransactionDto entityDTO) {
         Transaction transaction = mapper.map(entityDTO);
 
         BigDecimal stockPrice = transaction.getStock().getPrice();

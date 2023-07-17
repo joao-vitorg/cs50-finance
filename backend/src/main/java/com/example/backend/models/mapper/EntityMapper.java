@@ -1,7 +1,10 @@
 package com.example.backend.models.mapper;
 
 import com.example.backend.models.*;
-import com.example.backend.models.dto.*;
+import com.example.backend.models.dto.ClientDto;
+import com.example.backend.models.dto.StockDto;
+import com.example.backend.models.dto.TransactionDto;
+import com.example.backend.models.vo.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -12,30 +15,26 @@ public interface EntityMapper {
 
     Stock toStock(Long id);
 
-    Client map(ClientDto clientDto);
+    @Mapping(source = "stockId", target = "stock")
+    @Mapping(source = "clientId", target = "client")
+    Transaction map(TransactionDto transactionDto);
 
-    ClientVo map(Client client);
+    Client map(ClientDto clientDto);
 
     Stock map(StockDto stockDto);
 
-    StockDto map(Stock stock);
+    ClientVo map(Client client);
+
+    StockVo map(Stock stock);
 
     @Mapping(source = "stock.id", target = "stockId")
-    StockHistoryDto map(StockHistory stockHistory);
-
-    @Mapping(source = "stockId", target = "stock")
-    @Mapping(source = "clientId", target = "client")
-    ClientStock map(ClientStockDto clientStockDto);
+    StockHistoryVo map(StockHistory stockHistory);
 
     @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
-    ClientStockDto map(ClientStock clientStock);
-
-    @Mapping(source = "stockId", target = "stock")
-    @Mapping(source = "clientId", target = "client")
-    Transaction map(TransactionDto transactionDTO);
+    ClientStockVo map(ClientStock clientStock);
 
     @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
-    TransactionDto map(Transaction transaction);
+    TransactionVo map(Transaction transaction);
 }
