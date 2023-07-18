@@ -1,10 +1,8 @@
 package com.example.backend.services;
 
-import com.example.backend.models.StockHistory;
 import com.example.backend.models.dto.StockDto;
 import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.models.vo.StockVo;
-import com.example.backend.repositories.StockHistoryRepository;
 import com.example.backend.repositories.StockRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,16 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class StockService {
     private final StockRepository repository;
+    private final StockHistoryService stockHistoryService;
     private final EntityMapper mapper;
-    private final StockHistoryRepository stockHistoryRepository;
 
-    public StockService(StockRepository repository, StockHistoryRepository stockHistoryRepository, EntityMapper mapper) {
+    public StockService(StockRepository repository, StockHistoryService stockHistoryService, EntityMapper mapper) {
         this.repository = repository;
-        this.stockHistoryRepository = stockHistoryRepository;
+        this.stockHistoryService = stockHistoryService;
         this.mapper = mapper;
     }
 
@@ -43,7 +42,7 @@ public class StockService {
     }
 
     @Transactional()
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void updateStocks() {
         Random random = new Random();
         repository.findAll().forEach(stock -> {
@@ -54,7 +53,7 @@ public class StockService {
             if (newPrice.compareTo(minimum) < 0) newPrice = minimum;
 
             stock.setPrice(newPrice);
-            stockHistoryRepository.save(new StockHistory(stock, newPrice));
+            stockHistoryService.save(stock, newPrice);
         });
     }
 }

@@ -31,9 +31,10 @@ public class ClientStock {
     @Column(nullable = false)
     private Integer shares = 0;
 
-    public ClientStock(Client client, Stock stock) {
+    public ClientStock(Client client, Stock stock, Integer shares) {
         this.client = client;
         this.stock = stock;
+        this.shares = shares;
     }
 
     public BigDecimal getTotal() {

@@ -28,11 +28,6 @@ public class TransactionController {
         return service.findAll(pageable);
     }
 
-    @GetMapping("/{id}")
-    public TransactionVo findTransactionById(@PathVariable @Min(1) Long id) {
-        return service.findByID(id);
-    }
-
     @GetMapping("/client/{id}")
     public Page<TransactionVo> findTransactionByClientId(@PathVariable @Min(1) Long id, @ParameterObject Pageable pageable) {
         return service.findByClientId(id, pageable);

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping(value = "api/v1/client")
 @Tag(name = "Client Stock", description = "Client Stock API")
@@ -28,6 +30,11 @@ public class ClientStockController {
     @GetMapping("/stock")
     public Page<ClientStockVo> findAllClientStocks(@ParameterObject Pageable pageable) {
         return service.findAll(pageable);
+    }
+
+    @GetMapping("/{id}/virtualBalance")
+    public BigDecimal getVirtualBalance(@PathVariable @Min(1) Long id) {
+        return service.getVirtualBalance(id);
     }
 
     @GetMapping("/{id}/stock")

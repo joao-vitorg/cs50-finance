@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ClientStockService {
@@ -35,6 +37,12 @@ public class ClientStockService {
         return repository.findAll(pageable).map(mapper::map);
     }
 
+    @Transactional(readOnly = true)
+    public BigDecimal getVirtualBalance(Long id) {
+        Set<ClientStock> clientStocks = repository.findByClientId(id);
+        return clientStocks.stream().map(ClientStock::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     private Optional<ClientStock> findByClientAndStock(Client client, Stock stock) {
         return repository.findByClientAndStock(client, stock);
     }
@@ -46,13 +54,17 @@ public class ClientStockService {
     }
 
     private void buy(Transaction transaction) {
+        Integer shares = transaction.getShares();
         Client client = transaction.getClient();
         Stock stock = transaction.getStock();
-        ClientStock clientStock = findByClientAndStock(client, stock)
-                .orElseGet(() -> repository.save(new ClientStock(client, stock)));
 
-        clientStock.getClient().transactBalance(transaction.getTotal());
-        clientStock.transactShares(transaction.getShares());
+        client.transactBalance(transaction.getTotal());
+
+        findByClientAndStock(client, stock)
+                .ifPresentOrElse(
+                        cs -> cs.transactShares(shares),
+                        () -> repository.save(new ClientStock(client, stock, shares))
+                );
     }
 
     private void sell(Transaction transaction) {

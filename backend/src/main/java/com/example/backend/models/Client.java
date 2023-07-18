@@ -32,10 +32,6 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private Set<Transaction> transactions = new LinkedHashSet<>();
 
-    public BigDecimal getVirtualBalance() {
-        return getClientStocks().stream().map(ClientStock::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
     public void transactBalance(BigDecimal amount) {
         BigDecimal newBalance = getBalance().add(amount);
         if (newBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new InsufficientFundsError();

@@ -26,11 +26,6 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public TransactionVo findByID(Long id) {
-        return mapper.map(repository.findById(id).orElseThrow());
-    }
-
-    @Transactional(readOnly = true)
     public Page<TransactionVo> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::map);
     }
