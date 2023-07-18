@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { currencyFormat } from "../utils/currency"
+import { useState } from "react";
+import { currencyFormat } from "../utils/currency";
 
 export default function Transactions() {
   const [history, setHistory] = useState([
