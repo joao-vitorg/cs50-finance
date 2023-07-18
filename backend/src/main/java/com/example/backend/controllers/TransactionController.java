@@ -4,6 +4,7 @@ import com.example.backend.models.dto.TransactionDto;
 import com.example.backend.models.vo.TransactionVo;
 import com.example.backend.services.TransactionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class TransactionController {
     }
 
     @PostMapping()
-    public TransactionVo insertTransaction(@RequestBody TransactionDto transaction) {
+    public TransactionVo insertTransaction(@Valid @RequestBody TransactionDto transaction) {
         return service.save(transaction);
     }
 }

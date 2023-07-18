@@ -15,6 +15,8 @@ public interface EntityMapper {
 
     Stock toStock(Long id);
 
+    // Dto
+
     @Mapping(source = "stockId", target = "stock")
     @Mapping(source = "clientId", target = "client")
     Transaction map(TransactionDto transactionDto);
@@ -23,6 +25,8 @@ public interface EntityMapper {
 
     Stock map(StockDto stockDto);
 
+    // Vo
+
     ClientVo map(Client client);
 
     StockVo map(Stock stock);
@@ -30,11 +34,9 @@ public interface EntityMapper {
     @Mapping(source = "stock.id", target = "stockId")
     StockHistoryVo map(StockHistory stockHistory);
 
-    @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
     ClientStockVo map(ClientStock clientStock);
 
-    @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "client.id", target = "clientId")
     TransactionVo map(Transaction transaction);
 }

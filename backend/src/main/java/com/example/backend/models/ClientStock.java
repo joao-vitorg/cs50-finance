@@ -19,12 +19,12 @@ public class ClientStock {
     private Long id;
 
     @NaturalId
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Client client;
 
     @NaturalId
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 

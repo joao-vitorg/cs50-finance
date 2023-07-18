@@ -4,6 +4,7 @@ import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.vo.ClientVo;
 import com.example.backend.services.ClientService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -33,12 +34,12 @@ public class ClientController {
     }
 
     @PostMapping()
-    public ClientVo insertClient(@RequestBody ClientDto user) {
+    public ClientVo insertClient(@Valid @RequestBody ClientDto user) {
         return service.save(user);
     }
 
     @PutMapping("/{id}")
-    public ClientVo updateClient(@PathVariable @Min(1) Long id, @RequestBody ClientDto user) {
+    public ClientVo updateClient(@PathVariable @Min(1) Long id, @Valid @RequestBody ClientDto user) {
         return service.update(id, user);
     }
 }

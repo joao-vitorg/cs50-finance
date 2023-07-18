@@ -20,7 +20,7 @@ public class Transaction {
     @JoinColumn(nullable = false, updatable = false)
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 

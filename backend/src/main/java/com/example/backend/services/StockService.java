@@ -28,7 +28,7 @@ public class StockService {
     }
 
     @Transactional(readOnly = true)
-    public StockVo findByID(Long id) {
+    public StockVo findById(Long id) {
         return mapper.map(repository.findById(id).orElseThrow());
     }
 

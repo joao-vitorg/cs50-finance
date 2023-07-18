@@ -4,6 +4,7 @@ import com.example.backend.models.dto.StockDto;
 import com.example.backend.models.vo.StockVo;
 import com.example.backend.services.StockService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -29,11 +30,11 @@ public class StockController {
 
     @GetMapping("/{id}")
     public StockVo findStockById(@PathVariable @Min(1) Long id) {
-        return service.findByID(id);
+        return service.findById(id);
     }
 
     @PostMapping()
-    public StockVo insertStock(@RequestBody StockDto stockDto) {
+    public StockVo insertStock(@Valid @RequestBody StockDto stockDto) {
         return service.save(stockDto);
     }
 }

@@ -1,12 +1,11 @@
 package com.example.backend.models.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public record StockDto(@NotBlank String symbol, @NotBlank String name,
+public record StockDto(@NotBlank @Size(min = 3, max = 10) @Pattern(regexp = "^[a-z0-9]+$") String symbol,
+                       @NotBlank @Size(min = 3, max = 100) String name,
                        @NotNull @Positive BigDecimal price) implements Serializable {
 }
