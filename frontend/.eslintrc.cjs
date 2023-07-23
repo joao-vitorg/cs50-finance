@@ -7,7 +7,8 @@ module.exports = {
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
-		"plugin:react-hooks/recommended"
+		"plugin:react-hooks/recommended",
+		"plugin:prettier/recommended"
 	],
 	parser: "@typescript-eslint/parser",
 	parserOptions: {
@@ -22,6 +23,19 @@ module.exports = {
 			"warn",
 			{ allowConstantExport: true }
 		],
-		"@typescript-eslint/no-non-null-assertion": "off"
+		"@typescript-eslint/no-non-null-assertion": "off",
+		"prettier/prettier": [
+			"error",
+			{
+				"printWidth": 120,
+				"tabWidth": 2,
+				"useTabs": true,
+				"semi": true,
+				"singleQuote": false,
+				"plugins": [
+					"prettier-plugin-tailwindcss"
+				]
+			}
+		]
 	}
 };
