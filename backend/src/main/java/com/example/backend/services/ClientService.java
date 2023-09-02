@@ -33,8 +33,12 @@ public class ClientService {
 
     @Transactional()
     public ClientVo save(ClientDto entityDTO) {
-        Client entity = mapper.map(entityDTO);
-        return mapper.map(repository.save(entity));
+        if (repository.existsByUsername(entityDTO.username())) {
+            throw new DuplicatedEntryException();
+        }
+
+        Client entity = repository.save(mapper.map(entityDTO));
+        return mapper.map(entity);
     }
 
     @Transactional()

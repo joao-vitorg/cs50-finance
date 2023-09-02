@@ -40,7 +40,12 @@ public class StockService {
 
     @Transactional
     public StockVo save(StockDto stock) {
-        return mapper.map(repository.save(mapper.map(stock)));
+        if (repository.existsBySymbol(stock.symbol())) {
+            throw new DuplicatedEntryException();
+        }
+
+        Stock saved = repository.save(mapper.map(stock));
+        return mapper.map(saved);
     }
 
     @Transactional()
