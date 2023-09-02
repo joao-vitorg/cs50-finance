@@ -1,7 +1,9 @@
 package com.example.backend.services;
 
+import com.example.backend.infra.exceptions.DuplicatedEntryException;
+import com.example.backend.infra.mapper.EntityMapper;
+import com.example.backend.models.Stock;
 import com.example.backend.models.dto.StockDto;
-import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.models.vo.StockVo;
 import com.example.backend.repositories.StockRepository;
 import org.springframework.data.domain.Page;

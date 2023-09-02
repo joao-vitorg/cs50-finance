@@ -1,8 +1,8 @@
 package com.example.backend.services;
 
+import com.example.backend.infra.mapper.EntityMapper;
 import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.TransactionDto;
-import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.models.vo.TransactionVo;
 import com.example.backend.repositories.TransactionRepository;
 import org.springframework.data.domain.Page;

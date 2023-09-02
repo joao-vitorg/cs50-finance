@@ -1,10 +1,16 @@
-package com.example.backend.models.mapper;
+package com.example.backend.infra.mapper;
 
-import com.example.backend.models.*;
+import com.example.backend.models.Client;
+import com.example.backend.models.ClientStock;
+import com.example.backend.models.Stock;
+import com.example.backend.models.Transaction;
 import com.example.backend.models.dto.ClientDto;
 import com.example.backend.models.dto.StockDto;
 import com.example.backend.models.dto.TransactionDto;
-import com.example.backend.models.vo.*;
+import com.example.backend.models.vo.ClientStockVo;
+import com.example.backend.models.vo.ClientVo;
+import com.example.backend.models.vo.StockVo;
+import com.example.backend.models.vo.TransactionVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -30,9 +36,6 @@ public interface EntityMapper {
     ClientVo map(Client client);
 
     StockVo map(Stock stock);
-
-    @Mapping(source = "stock.id", target = "stockId")
-    StockHistoryVo map(StockHistory stockHistory);
 
     @Mapping(source = "client.id", target = "clientId")
     ClientStockVo map(ClientStock clientStock);

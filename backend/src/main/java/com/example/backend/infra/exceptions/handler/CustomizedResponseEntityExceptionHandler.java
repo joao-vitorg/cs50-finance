@@ -1,8 +1,6 @@
-package com.example.backend.exceptions.handler;
+package com.example.backend.infra.exceptions.handler;
 
 
-import com.example.backend.exceptions.ClientDontHaveStockError;
-import com.example.backend.exceptions.InsufficientFundsError;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,18 +12,25 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Error.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse handleAllExceptions(Exception ex, WebRequest request) {
         return new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
     }
 
-    @ExceptionHandler({ClientDontHaveStockError.class, InsufficientFundsError.class})
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleBadRequestException(Exception ex, WebRequest request) {
+        return new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse handleNoSuchElementException(Exception ex, WebRequest request) {
         return new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
     }
 

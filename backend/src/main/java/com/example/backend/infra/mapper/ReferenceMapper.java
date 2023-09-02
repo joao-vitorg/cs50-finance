@@ -1,4 +1,4 @@
-package com.example.backend.models.mapper;
+package com.example.backend.infra.mapper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

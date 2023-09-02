@@ -1,4 +1,4 @@
-package com.example.backend.exceptions.handler;
+package com.example.backend.infra.exceptions.handler;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -2,11 +2,8 @@ package com.example.backend.services;
 
 import com.example.backend.models.Stock;
 import com.example.backend.models.StockHistory;
-import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.models.vo.StockHistoryVo;
 import com.example.backend.repositories.StockHistoryRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

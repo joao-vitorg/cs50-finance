@@ -1,6 +1,6 @@
 package com.example.backend.models;
 
-import com.example.backend.exceptions.InsufficientFundsError;
+import com.example.backend.infra.exceptions.InsufficientFundsException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +34,7 @@ public class Client {
 
     public void transactBalance(BigDecimal amount) {
         BigDecimal newBalance = getBalance().add(amount);
-        if (newBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new InsufficientFundsError();
+        if (newBalance.compareTo(BigDecimal.valueOf(0)) < 0) throw new InsufficientFundsException();
         setBalance(newBalance);
     }
 }

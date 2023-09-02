@@ -1,11 +1,11 @@
 package com.example.backend.services;
 
-import com.example.backend.exceptions.ClientDontHaveStockError;
+import com.example.backend.infra.exceptions.ClientDontHaveStockException;
+import com.example.backend.infra.mapper.EntityMapper;
 import com.example.backend.models.Client;
 import com.example.backend.models.ClientStock;
 import com.example.backend.models.Stock;
 import com.example.backend.models.Transaction;
-import com.example.backend.models.mapper.EntityMapper;
 import com.example.backend.models.vo.ClientStockVo;
 import com.example.backend.repositories.ClientStockRepository;
 import org.springframework.data.domain.Page;
@@ -69,7 +69,7 @@ public class ClientStockService {
 
     private void sell(Transaction transaction) {
         ClientStock clientStock = findByClientAndStock(transaction.getClient(), transaction.getStock())
-                .orElseThrow(ClientDontHaveStockError::new);
+                .orElseThrow(ClientDontHaveStockException::new);
 
         clientStock.transactShares(transaction.getShares());
         clientStock.getClient().transactBalance(transaction.getTotal());
