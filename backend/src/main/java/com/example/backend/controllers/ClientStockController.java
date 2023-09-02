@@ -32,7 +32,7 @@ public class ClientStockController {
         return service.findAll(pageable);
     }
 
-    @GetMapping("/{id}/virtualBalance")
+    @GetMapping("/{id}/virtual-balance")
     public BigDecimal getVirtualBalance(@PathVariable @Min(1) Long id) {
         return service.getVirtualBalance(id);
     }
