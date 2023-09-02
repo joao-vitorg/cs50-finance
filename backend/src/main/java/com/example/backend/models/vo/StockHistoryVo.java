@@ -2,10 +2,14 @@ package com.example.backend.models.vo;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
+public interface StockHistoryVo {
+    @NotNull Double getOpen();
 
-public record StockHistoryVo(@NotNull Long id, @NotNull Long stockId, @NotNull BigDecimal price,
-                             @NotNull Instant createdAt) implements Serializable {
+    @NotNull Double getHigh();
+
+    @NotNull Double getClose();
+
+    @NotNull Double getLow();
+
+    @NotNull String getTime();
 }

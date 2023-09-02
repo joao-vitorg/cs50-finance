@@ -11,25 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class StockHistoryService {
     private final StockHistoryRepository repository;
-    private final EntityMapper mapper;
 
-    public StockHistoryService(StockHistoryRepository repository, EntityMapper mapper) {
+    public StockHistoryService(StockHistoryRepository repository) {
         this.repository = repository;
-        this.mapper = mapper;
     }
 
     @Transactional(readOnly = true)
-    public Page<StockHistoryVo> findAll(Pageable pageable) {
-        return repository.findAll(pageable).map(mapper::map);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<StockHistoryVo> findByStockId(Long id, Pageable pageable) {
-        return repository.findByStockId(id, pageable).map(mapper::map);
+    public List<StockHistoryVo> findByStockId(Long id) {
+        return repository.findByStockId(id);
     }
 
     public void save(Stock stock, BigDecimal price) {
