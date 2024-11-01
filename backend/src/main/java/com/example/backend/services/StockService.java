@@ -48,19 +48,19 @@ public class StockService {
         return mapper.map(saved);
     }
 
-    @Transactional()
+    @Transactional
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void updateStocks() {
-        Random random = new Random();
         repository.findAll().forEach(stock -> {
-            BigDecimal factor = BigDecimal.valueOf(1 + random.nextDouble(0.06) - 0.03);
-            BigDecimal newPrice = stock.getPrice().multiply(factor);
-
-            BigDecimal minimum = BigDecimal.valueOf(0.01);
-            if (newPrice.compareTo(minimum) < 0) newPrice = minimum;
-
+            BigDecimal newPrice = calculateNewPrice(stock);
             stock.setPrice(newPrice);
             stockHistoryService.save(stock, newPrice);
         });
+    }
+
+    private BigDecimal calculateNewPrice(Stock stock) {
+        double factor = 1 + new Random().nextDouble(0.06) - 0.03;
+        BigDecimal newPrice = stock.getPrice().multiply(BigDecimal.valueOf(factor));
+        return newPrice.compareTo(BigDecimal.valueOf(0.01)) < 0 ? BigDecimal.valueOf(0.01) : newPrice;
     }
 }
